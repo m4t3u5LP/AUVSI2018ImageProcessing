@@ -1,0 +1,9 @@
+Naming Convention:
+
+File names:
+
+<insert name here>_<insert code name here>
+
+Ex:
+
+MateusPinheiro_ShapeRecognition
