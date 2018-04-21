@@ -1,4 +1,6 @@
 from ImageCreatorFunction import CreateImage
+from SaveShape import save_shape
+from SaveLetter import save_letter
 import os
 from os.path import isfile, join
 import numpy
@@ -31,17 +33,32 @@ images3 = load_images_from_folder(letterpath)
 
 #creates random numbers due to how many pictures are in your folders
 #this is for the 9 shapes
-A = randint(0,9)
+NumShapes = 2#14#randint(0,9)
 #this is for the 26 letters
-B = randint(0,25)
+NumLetters = 2#26#randint(0,25)
 #this is for the 12 colors
-C = randint(1,12)
-D = randint(1,12)
+NumFields = 1#randint(1,12)
+NumColors1 = 3#12#randint(1,12)
+NumColors2 = 3#12#randint(1,12)
 
+c = 0
+GeneratedImage = []
 #calls the function that creates the image
-GeneratedImage = CreateImage(images1[0], images2[A], images3[B], C, D)
+for i in range(0, NumFields):
+    for j in range(0,NumShapes):
+        for k in range(0, NumLetters):
+            for u in range(1, NumColors1):
+                for v in range(1, NumColors2):
+                    if u != v:
+                        GeneratedImage.append(CreateImage(images1[i], images2[j], images3[k], u, v))
+                        shapepath = save_shape(i, j, k, u, v)
+                        cv2.imwrite(shapepath, GeneratedImage[c])
+                        letterpath = save_letter(i, j, k, u, v)
+                        cv2.imwrite(letterpath, GeneratedImage[c])
+
 
 #shows the generated image in a window
-cv2.imshow('res', GeneratedImage)
-cv2.waitKey(0)  ## Wait for keystroke
-cv2.destroyAllWindows()  ## Destroy all windows
+                        #cv2.imshow('%s'%c, GeneratedImage[c])
+                        #cv2.waitKey(0)  ## Wait for keystroke
+                        cv2.destroyAllWindows()  ## Destroy all windows
+                        c = c + 1
