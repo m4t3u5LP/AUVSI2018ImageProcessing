@@ -13,15 +13,16 @@ TargetPixels = [TargetY, TargetX];
 %% Data Parsing
 
 %C:\Users\Mateus Pinheiro\Documents\GitHub\AUVSI2018ImageProcessing
-readfile1 = fileread( 'C:\Users\Mateus Pinheiro\Documents\GitHub\AUVSI2018ImageProcessing\TLM_Example2.txt' );
+readfile1 = fileread( 'C:\Users\Mateus Pinheiro\Documents\GitHub\AUVSI2018ImageProcessing\TLM_Example3.txt' );
 parsefile = strsplit(readfile1,",");
-reshapefile = reshape(parsefile, 4, (length(parsefile))/4);
+reshapefile = reshape(parsefile, 5, (length(parsefile))/5);
 filetomatrix = str2double(reshapefile);
 
 TimeData  = filetomatrix(1,:);
 LatitudeData = filetomatrix(2,:);
 LongitudeData = filetomatrix(3,:);
 HeadingData = filetomatrix(4,:);
+AltitudeData = filetomatrix(5,:).*0.3048;
 
 exit = 0;
 i = floor(length(TimeData)/2);
@@ -33,6 +34,7 @@ while exit == 0
        HeadingInterp = HeadingData(i);
        GPSLATInterp = LatitudeData(i);
        GPSLONInterp = LongitudeData(i);
+       PlaneAlti = AltitudeData(i);
        
        exit = 1;
        
@@ -45,6 +47,7 @@ while exit == 0
         PlaneGPSLON2 = LongitudeData(i+1);
         TimeOfTelem1 = TimeData(i);
         TimeOfTelem2 = TimeData(i+1);
+        PlaneAlti = AltitudeData(i);
         
         HeadingInterp = InterpolationFunction(TimeOfPic,TimeOfTelem1, TimeOfTelem2, Heading1, Heading2);
         GPSLATInterp = InterpolationFunction(TimeOfPic,TimeOfTelem1, TimeOfTelem2, PlaneGPSLAT1, PlaneGPSLAT2);
@@ -87,10 +90,10 @@ PlaneGPSInterp = [GPSLATInterp, GPSLONInterp];
 
 
 %% Function Call
-TargetGPSCoords = GPSLocalizationFunction(TargetPixels, HeadingInterp, PlaneGPSInterp, California);
+TargetGPSCoords = GPSLocalizationFunction(TargetPixels, HeadingInterp, PlaneGPSInterp, PlaneAlti, California);
 end
 
-function TargetLoc = GPSLocalizationFunction(TargetPixelLoc, Heading, GPSCoords, California)
+function TargetLoc = GPSLocalizationFunction(TargetPixelLoc, Heading, GPSCoords, Alti, California)
     Resolution = [1640, 940]; %size of image
     FOV = [10.5626, 6.10052]; %deg
     TargetPixels = TargetPixelLoc; %where target is on image
@@ -99,7 +102,7 @@ function TargetLoc = GPSLocalizationFunction(TargetPixelLoc, Heading, GPSCoords,
     
     PixelVector = TargetPixels - PlanePixels; %distance from plane to target in pixels
     PercentVector = PixelVector./(Resolution/2); %distance from plane to target as a percentage of image size
-    GroundSize = 70.*tand(FOV); %size of ground covered by field of view
+    GroundSize = Alti.*tand(FOV); %size of ground covered by field of view
     
     TargetLocPCoords = GroundSize .* PercentVector; %distance from plane to target in meters in the plane's coordinate system
     
