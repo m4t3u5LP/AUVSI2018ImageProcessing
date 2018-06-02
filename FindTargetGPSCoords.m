@@ -94,7 +94,7 @@ TargetGPSCoords = GPSLocalizationFunction(TargetPixels, HeadingInterp, PlaneGPSI
 end
 
 function TargetLoc = GPSLocalizationFunction(TargetPixelLoc, Heading, GPSCoords, Alti, California)
-    Resolution = [1640, 940]; %size of image
+    Resolution = [844, 676]; %size of image
     FOV = [10.5626, 6.10052]; %deg
     TargetPixels = TargetPixelLoc; %where target is on image
     PlanePixels = [Resolution(1)/2, Resolution(2)/2]; %where plane is on image
