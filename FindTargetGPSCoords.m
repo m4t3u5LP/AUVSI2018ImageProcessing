@@ -87,7 +87,7 @@ PlaneGPSInterp = [GPSLATInterp, GPSLONInterp];
 
 
 %% Function Call
-TargetGPSCoords = GPSLocalizationFunction(TargetPixels, HeadingInterp, PlaneGPSInterp, California)
+TargetGPSCoords = GPSLocalizationFunction(TargetPixels, HeadingInterp, PlaneGPSInterp, California);
 end
 
 function TargetLoc = GPSLocalizationFunction(TargetPixelLoc, Heading, GPSCoords, California)

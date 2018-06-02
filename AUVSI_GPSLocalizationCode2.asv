@@ -1,11 +1,8 @@
-%{
 clear all
-%From IMReq
+%(From IMReq
 TargetY = 1640; %pixels
 TargetX = 940; %pixels
 TimeOfPic = 74843.3373;
-%}
-function TargetGPSCoords = FindTargetGPSCoords(TargetY, TargetX, TimeOfPic, California)
 
 TargetPixels = [TargetY, TargetX];
 
@@ -87,8 +84,7 @@ PlaneGPSInterp = [GPSLATInterp, GPSLONInterp];
 
 
 %% Function Call
-TargetGPSCoords = GPSLocalizationFunction(TargetPixels, HeadingInterp, PlaneGPSInterp, California)
-end
+TargetGPSCoords = GPSLocalizationFunction(TargetPixels, HeadingInterp, PlaneGPSInterp, 1)
 
 function TargetLoc = GPSLocalizationFunction(TargetPixelLoc, Heading, GPSCoords, California)
     Resolution = [1640, 940]; %size of image
